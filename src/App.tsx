@@ -66,7 +66,13 @@ const App = () => {
   }, [user]);
 
   useEffect(() => {
-    dispatch(search(searchValue));
+    const timeout = setTimeout(() => {
+      dispatch(search(searchValue));
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [searchValue, dispatch]);
 
   useEffect(() => {
@@ -119,9 +125,9 @@ const App = () => {
           </Box>
         </Box>
 
-        {isError ? message : ""}
+        {/* {isError ? "no actors" : ""} */}
 
-        {userValue?.length === 0 ? "no actors" : ""}
+        {userValue ? "" : "no actors"}
 
         {/* ascending */}
 
@@ -129,12 +135,12 @@ const App = () => {
           {isSuccess &&
             userValue &&
             userValue.map((user: any) => {
-              const { char_id, name, img, nickname } = user;
+              const { id, name, image, nickname } = user;
               return (
-                <Grid item xs={3} key={char_id}>
+                <Grid item xs={3} key={id}>
                   <Box className="user">
                     <Box className="img">
-                      <img src={img} alt={name} />
+                      <img src={image} alt={name} />
                     </Box>
                     <article>
                       <p>
