@@ -10,13 +10,31 @@ const initialState: IInitialState = {
   message: "",
 };
 
+// export const search: any = createAsyncThunk(
+//   "search/user",
+//   async (url, { rejectWithValue }) => {
+//     const response = await searchService.search(url);
+
+//     if (!response) {
+//       return rejectWithValue("Can't add task. Server error.");
+//     }
+
+//     return response;
+//   }
+// );
+
 export const search: any = createAsyncThunk(
   "search/user",
-  async (url, thunkAPI) => {
+  async (url: any, thunkAPI: any) => {
     try {
       return await searchService.search(url);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+    } catch (error: any) {
+      const message =
+        (error.response && error.response.data && error.data.message) ||
+        error.message ||
+        error.String();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -41,6 +59,7 @@ export const searchSlice = createSlice({
       })
       .addCase(search.rejected, (state, action) => {
         state.isLoading = false;
+        state.isSuccess = false;
         state.isError = true;
         state.message = action.payload;
         state.user = null;

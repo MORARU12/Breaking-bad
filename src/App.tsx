@@ -119,7 +119,12 @@ const App = () => {
           </Box>
         </Box>
 
+        {isError ? message : ""}
+
+        {userValue?.length === 0 ? "no actors" : ""}
+
         {/* ascending */}
+
         <Grid container spacing={4}>
           {isSuccess &&
             userValue &&
